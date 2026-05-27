@@ -1,0 +1,37 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]   # 👈 이 줄 추가!
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update    # create는 매번 테이블 날아감! update로!
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+server:
+  port: 5000
+
+# ===== 여기 추가 =====
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never        # DB 다운돼도 UP 뜨게 하려면 never 추천
+      probes:
+        enabled: true
+  health:
+    db:
+      enabled: false             # DB 죽었을 때 헬스체크까지 죽는 거 방지
+    diskspace:
+      enabled: true

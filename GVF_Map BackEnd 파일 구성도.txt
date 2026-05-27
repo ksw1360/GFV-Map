@@ -1,0 +1,54 @@
+SpringBoot 4.0.3
+Dependency용도
+                spring-boot-starter-data-jpa : JPA + Hibernate — DB 접근 (Repository)
+                spring-boot-starter-security : Spring Security — 인증/인가
+                spring-boot-starter-validation : Bean Validation — @Valid, @NotNull, @Email 등
+                spring-boot-starter-webmvc : Spring MVC — REST API (Controller, RequestMapping)
+                lombok (compileOnly + annotationProcessor) : Lombok — @Getter, @Builder 등
+                spring-boot-devtools : DevTools — 코드 변경 시 자동 재시작
+                mysql-connector-j : MySQL 드라이버
+src
+   - main
+     - java
+	    - com.tj.GFV_Map
+		                 - auth
+                           └ 권한 클래스 추가 예정
+                         - config
+						   └ CorsConfig.java // Cors 설정
+						   └ SecurityConfig.java // 보안 설정
+						 - controller
+						   └ MainController.java // 임시 Controller
+						 - dto
+						   └ request
+						   └ response
+						 - entity
+						   └ favorite.java // 즐겨찾기
+						   └ menu.java // 메뉴
+						   └ photo.java // 사진
+						   └ review.java // 리뷰
+						   └ user.java // 일반소비자/점주
+						   └ userpreference.java // 사용자 선호 프로필
+						   └ vegan_restarant.java // (비건/GF 식당): 가게 기본 정보
+						 - enum
+						   └ MenuCategory.java // 메뉴 enum
+						   └ OwnerType.java // 사용자 enum
+						   └ UserRole.java // 유저 enum
+						   └ VeganType.java // 채식 enum
+						 - exception
+						   └ CustomException.java // 사용자 Exception
+						   └ ErrorCode.java // 사용자 에러 코드
+						   └ GlobalExcetionHandler.java // 공통 Exception
+						 - jwt
+						   └ jwtProperties.java // jwt 설정
+						   └ JwtTokenProvider.java // jwt 등록
+						 - login
+						   └ login // 로그인 추가 예정
+						 - repository
+						   └ Jpa repository 추가 예정
+						 - service
+						   └ service.java 추가 예정
+						 GMapApplication
+     - resource
+       - application.yml
+.env // 환경 설정 파일
+.env.example // Test용 환경설정 파일
