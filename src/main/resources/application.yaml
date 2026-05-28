@@ -35,3 +35,8 @@ management:
       enabled: false             # DB 죽었을 때 헬스체크까지 죽는 거 방지
     diskspace:
       enabled: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-expiration: ${JWT_ACCESS_EXPIRATION}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION}

@@ -1,4 +1,4 @@
-package com.tj.GFV_Map.domain;
+package com.tj.GFV_Map.enums;
 
 public enum UserRole {
     USER,   // 일반 사용자
