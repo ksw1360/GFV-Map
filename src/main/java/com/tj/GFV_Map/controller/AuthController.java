@@ -2,12 +2,14 @@ package com.tj.GFV_Map.controller;
 
 
 import com.tj.GFV_Map.dto.request.LoginRequestDto;
+import com.tj.GFV_Map.dto.request.RefreshRequestDto;
 import com.tj.GFV_Map.dto.request.SignupRequestDto;
 import com.tj.GFV_Map.dto.response.TokenResponseDto;
 import com.tj.GFV_Map.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +30,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(authService.login(dto));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponseDto> reissue(@RequestBody RefreshRequestDto dto) {
+        return ResponseEntity.ok(authService.reissue(dto.getRefreshToken()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal Long userId) {
+        authService.logout(userId);
+        return ResponseEntity.ok().build();
     }
 }

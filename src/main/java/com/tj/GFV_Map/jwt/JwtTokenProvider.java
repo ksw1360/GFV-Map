@@ -94,4 +94,17 @@ public class JwtTokenProvider {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
+    // 토큰의 만료 시각 추출 (DB 저장용)
+    public java.time.LocalDateTime getExpiration(String token) {
+        java.util.Date exp = parseClaims(token).getExpiration();
+        return exp.toInstant()
+                .atZone(java.time.ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    // refresh 만료 시간 외부에서 알 수 있게 노출
+    public long getRefreshExpirationMillis() {
+        return refreshExpiration;
+    }
 }
