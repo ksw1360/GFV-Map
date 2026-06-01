@@ -6,14 +6,12 @@ import com.tj.GFV_Map.dto.request.RefreshRequestDto;
 import com.tj.GFV_Map.dto.request.SignupRequestDto;
 import com.tj.GFV_Map.dto.response.TokenResponseDto;
 import com.tj.GFV_Map.service.AuthService;
+import com.tj.GFV_Map.service.KakaoOAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,5 +39,12 @@ public class AuthController {
     public ResponseEntity<Void> logout(@AuthenticationPrincipal Long userId) {
         authService.logout(userId);
         return ResponseEntity.ok().build();
+    }
+
+    // kakao return
+    private final KakaoOAuthService kakaoOAuthService;  // 필드 추가
+    @GetMapping("/kakao/callback")
+    public ResponseEntity<TokenResponseDto> kakaoCallback(@RequestParam String code) {
+        return ResponseEntity.ok(kakaoOAuthService.loginWithKakao(code));
     }
 }
