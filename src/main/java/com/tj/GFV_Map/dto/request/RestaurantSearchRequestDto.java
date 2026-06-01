@@ -12,6 +12,5 @@ public class RestaurantSearchRequestDto {
     public String name;
     public String address;
     public String menu;
-    //private VeganType veganType;   // 👈 추가
     public VeganType veganType;   // 👈 추가
 }
