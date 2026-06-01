@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:file:.env[.properties]   # 👈 이 줄 추가!
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -9,17 +9,32 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update    # create는 매번 테이블 날아감! update로!
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
 
+  mail:                          # 👈 여기! spring 바로 아래, datasource·jpa랑 같은 레벨
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 server:
   port: 5000
 
-# ===== 여기 추가 =====
 management:
   endpoints:
     web:
@@ -27,12 +42,12 @@ management:
         include: health,info
   endpoint:
     health:
-      show-details: never        # DB 다운돼도 UP 뜨게 하려면 never 추천
+      show-details: never
       probes:
         enabled: true
   health:
     db:
-      enabled: false             # DB 죽었을 때 헬스체크까지 죽는 거 방지
+      enabled: false
     diskspace:
       enabled: true
 
@@ -55,8 +70,3 @@ naver:
   client-id: ${NAVER_CLIENT_ID}
   client-secret: ${NAVER_CLIENT_SECRET}
   redirect-uri: ${NAVER_REDIRECT_URI}
-
-#naver:
-#  client-id: TEST_VALUE_123
-#  client-secret: TEST_SECRET_456
-#  redirect-uri: http://localhost:5000/auth/naver/callback

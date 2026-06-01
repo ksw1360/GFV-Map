@@ -1,9 +1,8 @@
 package com.tj.GFV_Map.controller;
 
-
-import com.tj.GFV_Map.dto.request.LoginRequestDto;
-import com.tj.GFV_Map.dto.request.RefreshRequestDto;
-import com.tj.GFV_Map.dto.request.SignupRequestDto;
+import com.tj.GFV_Map.dto.request.VerifyEmailRequestDto;
+import com.tj.GFV_Map.dto.request.ResendVerificationRequestDto;
+import com.tj.GFV_Map.dto.request.*;
 import com.tj.GFV_Map.dto.response.TokenResponseDto;
 import com.tj.GFV_Map.service.AuthService;
 import com.tj.GFV_Map.service.GoogleOAuthService;
@@ -70,5 +69,19 @@ public class AuthController {
             @RequestParam String code,
             @RequestParam String state) {
         return ResponseEntity.ok(naverOAuthService.loginWithNaver(code, state));
+    }
+
+    //이멜 코드 검증
+    @PostMapping("/verify-email")
+    public ResponseEntity<String> verifyEmail(@RequestBody VerifyEmailRequestDto dto) {
+        authService.verifyEmail(dto.getEmail(), dto.getCode());
+        return ResponseEntity.ok("이메일 인증이 완료되었습니다.");
+    }
+
+    // 인증 코드 재발송
+    @PostMapping("/resend-verification")
+    public ResponseEntity<String> resendVerification(@RequestBody ResendVerificationRequestDto dto) {
+        authService.sendVerificationCode(dto.getEmail());
+        return ResponseEntity.ok("인증 코드가 재발송되었습니다.");
     }
 }

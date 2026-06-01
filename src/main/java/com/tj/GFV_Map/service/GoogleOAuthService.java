@@ -99,6 +99,7 @@ public class GoogleOAuthService {
                             .provider(UserProvider.GOOGLE)
                             .role(UserRole.USER)
                             .build();
+                    newUser.verifyEmail();   // 👈 이 줄 추가 (소셜은 자동 인증)
                     return userRepository.save(newUser);
                 });
     }

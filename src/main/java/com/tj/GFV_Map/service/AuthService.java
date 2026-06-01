@@ -5,11 +5,15 @@ import com.tj.GFV_Map.dto.request.SignupRequestDto;
 import com.tj.GFV_Map.dto.response.TokenResponseDto;
 import com.tj.GFV_Map.entity.RefreshToken;
 import com.tj.GFV_Map.entity.User;
+import com.tj.GFV_Map.entity.VerificationCode;
 import com.tj.GFV_Map.enums.UserProvider;
 import com.tj.GFV_Map.enums.UserRole;
 import com.tj.GFV_Map.jwt.JwtTokenProvider;
 import com.tj.GFV_Map.repository.RefreshTokenRepository;
 import com.tj.GFV_Map.repository.UserRepository;
+import com.tj.GFV_Map.repository.VerificationCodeRepository;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    //이멜 인증 의존성 추가
+    private final VerificationCodeRepository verificationCodeRepository;
+    private final EmailService emailService;
+
     // 회원가입은 그대로
     @Transactional
     public void signup(SignupRequestDto dto) {
@@ -40,6 +48,47 @@ public class AuthService {
                 .role(UserRole.USER)
                 .build();
         userRepository.save(user);
+
+        //인증 코드 메일 발송
+        sendVerificationCode(dto.getEmail());
+    }
+
+    @Transactional
+    public void sendVerificationCode(String email) {
+        // 6자리 숫자 코드 생성 (100000 ~ 999999)
+        String code = String.valueOf(100_000 + new java.util.Random().nextInt(900_000));
+
+        // 만료시간 = 5분 뒤
+        LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(5);
+
+        VerificationCode verificationCode = VerificationCode.builder()
+                .email(email)
+                .code(code)
+                .expiresAt(expiresAt)
+                .build();
+        verificationCodeRepository.save(verificationCode);
+
+        // 비동기로 보내는 게 좋지만 일단 동기로
+        emailService.sendVerificationCode(email, code);
+    }
+
+    @Transactional
+    public void verifyEmail(String email, String code) {
+        VerificationCode verification = verificationCodeRepository
+                .findByEmailAndCodeAndIsUsedFalse(email, code)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 인증 코드입니다."));
+
+        if (verification.isExpired()) {
+            throw new IllegalArgumentException("만료된 인증 코드입니다.");
+        }
+
+        // 코드 사용 처리
+        verification.markAsUsed();
+
+        // 유저 인증 처리
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        user.verifyEmail();
     }
 
     // ── 로그인: 토큰 발급 + refresh 를 DB 에 저장 ──

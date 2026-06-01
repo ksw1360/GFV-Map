@@ -2,12 +2,14 @@ package com.tj.GFV_Map.repository;
 
 import com.tj.GFV_Map.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long>,
+        JpaSpecificationExecutor<Restaurant> {
 
     /*
     1. 상호명

@@ -16,6 +16,7 @@ import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -193,4 +194,8 @@ public class Restaurant {
     public void verify() {
         this.isVerified = true;
     }
+
+//    @OneToMany(mappedBy = "restaurant") private List<Menu> menus;
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    private List<Menu> menus = new ArrayList<>();
 }

@@ -2,14 +2,14 @@ package com.tj.GFV_Map.controller;
 
 
 
+import com.tj.GFV_Map.dto.request.RestaurantSearchRequestDto;
+import com.tj.GFV_Map.dto.response.MenuResponseDto;
 import com.tj.GFV_Map.dto.response.RestaurantResponseDto;
+import com.tj.GFV_Map.dto.response.RestaurantSearchResponseDto;
 import com.tj.GFV_Map.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +26,16 @@ public class RestaurantController {
     )
     {
         return ResponseEntity.ok(restaurantService.getAllRestaurant(keyword));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<RestaurantSearchResponseDto>> search(
+            @ModelAttribute RestaurantSearchRequestDto req) {
+        return ResponseEntity.ok(restaurantService.search(req));
+    }
+
+    @GetMapping("/{id}/menus")
+    public ResponseEntity<List<MenuResponseDto>> getMenus(@PathVariable Long id) {
+        return ResponseEntity.ok(restaurantService.getMenusByRestaurantId(id));
     }
 }

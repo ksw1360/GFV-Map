@@ -59,6 +59,10 @@ public class User {
     @Column(name = "user_deleted_at")
     private LocalDateTime deletedAt;
 
+    // Mail 추적
+    @Column(name = "user_is_email_verified", nullable = false)
+    private Boolean isEmailVerified = false;
+
     @Builder
     private User(String email,
                  String password,
@@ -92,5 +96,9 @@ public class User {
 
     public boolean isDeleted() {
         return this.deletedAt != null;
+    }
+
+    public void verifyEmail() {
+        this.isEmailVerified = true;
     }
 }

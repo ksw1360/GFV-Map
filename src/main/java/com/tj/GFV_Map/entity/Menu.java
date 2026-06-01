@@ -1,14 +1,19 @@
 package com.tj.GFV_Map.entity;
 
+import com.tj.GFV_Map.enums.MenuCategory;
+import com.tj.GFV_Map.enums.VeganType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -66,6 +71,25 @@ public class Menu {
     @Column(name = "menu_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    //추가
+    @Enumerated(EnumType.STRING)
+    @Column(name = "menu_category", length = 20)
+    private MenuCategory category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "menu_vegan_type", length = 20)
+    private VeganType veganType;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "menu_allergens", columnDefinition = "json")
+    private List<String> allergens;
+
+    @Column(name = "menu_is_active")
+    private Boolean isActive = true;
+
+    @Column(name = "menu_is_seasonal")
+    private Boolean isSeasonal = false;
+
     @Builder
     private Menu(Restaurant restaurant,
                  String name,
@@ -75,7 +99,11 @@ public class Menu {
                  Boolean isVegan,
                  Boolean isGlutenFree,
                  String imageUrl,
-                 Integer displayOrder) {
+                 Integer displayOrder,
+                MenuCategory category,
+                 VeganType veganType,
+                 List<String> allergens,
+                 Boolean isSeasonal) {
         this.restaurant = restaurant;
         this.name = name;
         this.description = description;
@@ -96,4 +124,14 @@ public class Menu {
 
     public void markUnavailable() { this.isAvailable = false; }
     public void markAvailable()   { this.isAvailable = true; }
+
+    public void updateCategoryAndVegan(MenuCategory category, VeganType veganType,
+                                       List<String> allergens) {
+        this.category = category;
+        this.veganType = veganType;
+        this.allergens = allergens;
+    }
+
+    public void deactivate() { this.isActive = false; }
+    public void activate()   { this.isActive = true; }
 }
