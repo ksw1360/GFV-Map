@@ -3,18 +3,14 @@ package com.tj.GFV_Map.dto.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-public class SignupRequestDto {
+@Setter
+@NoArgsConstructor
+public class SendEmailCodeRequestDto {
     @Email
     @NotBlank
     private String email;
-
-    @NotBlank
-    private String code;        // 👈 추가: 이메일 인증 코드
-
-    @NotBlank
-    private String password;
-    @NotBlank
-    private String nickname;
 }

@@ -37,9 +37,25 @@ public class AuthService {
     // 회원가입은 그대로
     @Transactional
     public void signup(SignupRequestDto dto) {
+        // 1. 이메일 중복 체크 (이중 안전망)
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            throw new IllegalStateException("이미 가입된 이메일입니다.");
         }
+
+        // 2. 코드 재검증
+        VerificationCode verification = verificationCodeRepository
+                .findByEmailAndCodeAndIsUsedFalse(dto.getEmail(), dto.getCode())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 인증 코드입니다."));
+
+        if (verification.isExpired()) {
+            throw new IllegalArgumentException("만료된 인증 코드입니다.");
+        }
+
+        // 3. 닉네임 중복 체크 (있다면)
+        // userRepository.existsByNickname(dto.getNickname()) ...
+        // 이건 닉네임 중복 작업 때 추가
+
+        // 4. user 생성 — 이미 인증된 상태로 바로 생성
         User user = User.builder()
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -47,10 +63,11 @@ public class AuthService {
                 .provider(UserProvider.LOCAL)
                 .role(UserRole.USER)
                 .build();
+        user.verifyEmail();  // 👈 가입 즉시 인증됨 처리
         userRepository.save(user);
 
-        //인증 코드 메일 발송
-        sendVerificationCode(dto.getEmail());
+        // 5. 사용한 코드 처리
+        verification.markAsUsed();
     }
 
     @Transactional
@@ -102,6 +119,11 @@ public class AuthService {
         }
 
         user.updateLastLoginAt();
+
+        if (!user.getIsEmailVerified()) {
+            throw new IllegalStateException("이메일 인증을 완료해주세요. 메일을 확인하세요.");
+        }
+
 
         String accessToken  = jwtTokenProvider.createAccessToken(
                 user.getId(), user.getEmail(), user.getRole());
@@ -170,5 +192,29 @@ public class AuthService {
         }
         // 해당 사용자의 refresh token 삭제 → 더 이상 재발급 불가
         refreshTokenRepository.deleteById(userId);
+    }
+
+    @Transactional
+    public void sendEmailCodeForSignup(String email) {
+        // 이메일 중복 체크 (가입 전이라 이게 의미 있음)
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalStateException("이미 가입된 이메일입니다.");
+        }
+
+        // 기존 sendVerificationCode 메서드 재활용
+        sendVerificationCode(email);
+    }
+
+    @Transactional(readOnly = true)
+    public void verifyCodeOnly(String email, String code) {
+        VerificationCode verification = verificationCodeRepository
+                .findByEmailAndCodeAndIsUsedFalse(email, code)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 인증 코드입니다."));
+
+        if (verification.isExpired()) {
+            throw new IllegalArgumentException("만료된 인증 코드입니다.");
+        }
+
+        // 검증만, isUsed는 그대로 false
     }
 }
