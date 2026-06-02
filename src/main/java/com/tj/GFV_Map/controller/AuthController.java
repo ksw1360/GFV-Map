@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;  // 위쪽 import에 추가
 
 @RestController
 @RequiredArgsConstructor
@@ -50,6 +51,13 @@ public class AuthController {
         return ResponseEntity.ok(kakaoOAuthService.loginWithKakao(code));
     }
 
+    // 👇 새로 추가 — SPA 프론트가 POST로 code 보내는 패턴
+    @PostMapping("/kakao/login")
+    public ResponseEntity<TokenResponseDto> kakaoLoginPost(@RequestBody Map<String, String> body) {
+        String code = body.get("code");
+        return ResponseEntity.ok(kakaoOAuthService.loginWithKakao(code));
+    }
+
     // Google return
     // 필드 추가 (위쪽 KakaoOAuthService 옆에)
     private final GoogleOAuthService googleOAuthService;
@@ -84,5 +92,33 @@ public class AuthController {
     public ResponseEntity<String> resendVerification(@RequestBody ResendVerificationRequestDto dto) {
         authService.sendVerificationCode(dto.getEmail());
         return ResponseEntity.ok("인증 코드가 재발송되었습니다.");
+    }
+
+    // 가입 1단계: 이메일 입력 → 인증 코드 발송
+    @PostMapping("/email/send")
+    public ResponseEntity<String> sendEmailCode(@Valid @RequestBody SendEmailCodeRequestDto dto) {
+        authService.sendEmailCodeForSignup(dto.getEmail());
+        return ResponseEntity.ok("인증 코드가 발송되었습니다.");
+    }
+
+    // 가입 2단계: 코드 검증 (사용 처리 안 함)
+    @PostMapping("/email/verify")
+    public ResponseEntity<String> verifyEmailCode(@RequestBody VerifyEmailRequestDto dto) {
+        authService.verifyCodeOnly(dto.getEmail(), dto.getCode());
+        return ResponseEntity.ok("이메일이 인증되었습니다.");
+    }
+
+    // 구글 SPA 로그인
+    @PostMapping("/google/login")
+    public ResponseEntity<TokenResponseDto> googleLoginPost(@RequestBody Map<String, String> body) {
+        return ResponseEntity.ok(googleOAuthService.loginWithGoogle(body.get("code")));
+    }
+
+    // 네이버 SPA 로그인 (state도 받음)
+    @PostMapping("/naver/login")
+    public ResponseEntity<TokenResponseDto> naverLoginPost(@RequestBody Map<String, String> body) {
+        String code = body.get("code");
+        String state = body.get("state");
+        return ResponseEntity.ok(naverOAuthService.loginWithNaver(code, state));
     }
 }
