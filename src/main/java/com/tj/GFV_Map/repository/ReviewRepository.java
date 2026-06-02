@@ -1,0 +1,32 @@
+package com.tj.GFV_Map.repository;
+
+import com.tj.GFV_Map.entity.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.math.BigDecimal;
+import java.util.Optional;
+
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+    // 한 사용자가 한 식당에 쓴 리뷰 (수정/중복 체크용)
+    Optional<Review> findByUserIdAndRestaurantId(Long userId, Long restaurantId);
+
+    // 식당의 리뷰 목록 (숨김 제외, 최신순, 페이징)
+    Page<Review> findByRestaurantIdAndIsHiddenFalseOrderByCreatedAtDesc(
+            Long restaurantId, Pageable pageable);
+
+    // 사용자가 쓴 리뷰 목록 (마이페이지용)
+    Page<Review> findByUserIdAndIsHiddenFalseOrderByCreatedAtDesc(
+            Long userId, Pageable pageable);
+
+    // 식당의 평균 평점 계산 (숨김 제외)
+    @Query("SELECT AVG(r.rating) FROM Review r " +
+            "WHERE r.restaurant.id = :restaurantId AND r.isHidden = false")
+    BigDecimal findAvgRatingByRestaurantId(@Param("restaurantId") Long restaurantId);
+
+    // 식당의 리뷰 개수 (숨김 제외)
+    long countByRestaurantIdAndIsHiddenFalse(Long restaurantId);
+}
