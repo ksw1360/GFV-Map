@@ -139,6 +139,11 @@ public class KakaoOAuthService {
                                         .build())
                 );
 
-        return new TokenResponseDto(accessToken, refreshToken);
+        return new TokenResponseDto(
+                accessToken,
+                refreshToken,
+                user.getNickname(),          // 👈 추가
+                user.getProfileImageUrl()    // 👈 추가
+        );
     }
 }

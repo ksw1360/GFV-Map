@@ -147,7 +147,12 @@ public class AuthService {
                                         .build())
                 );
 
-        return new TokenResponseDto(accessToken, refreshToken);
+        return new TokenResponseDto(
+                accessToken,
+                refreshToken,
+                user.getNickname(),          // 👈 추가
+                user.getProfileImageUrl()    // 👈 추가
+        );
     }
 
     // ── 재발급(Rotation): refresh 검증 → DB 대조 → 새 access + 새 refresh 발급 ──
@@ -185,7 +190,12 @@ public class AuthService {
         // 6) DB 의 기존 행을 회전(UPDATE) → 옛 refresh 즉시 무효화
         stored.rotate(newRefresh, newRefreshExpiresAt);
 
-        return new TokenResponseDto(newAccess, newRefresh);
+        return new TokenResponseDto(
+                newAccess,
+                newRefresh,
+                user.getNickname(),          // 👈 추가
+                user.getProfileImageUrl()    // 👈 추가
+        );
     }
 
     // 사용자 Token 삭제 - 로그아웃
