@@ -44,7 +44,8 @@ public class AuthController {
     }
 
     // kakao return
-    private final KakaoOAuthService kakaoOAuthService;  // 필드 추가
+    private final KakaoOAuthService kakaoOAuthService; // 필드 추가
+
     @GetMapping("/kakao/callback")
     public ResponseEntity<TokenResponseDto> kakaoCallback(@RequestParam String code) {
         return ResponseEntity.ok(kakaoOAuthService.loginWithKakao(code));
@@ -79,7 +80,7 @@ public class AuthController {
         return ResponseEntity.ok(naverOAuthService.loginWithNaver(code, state));
     }
 
-    //이멜 코드 검증
+    // 이멜 코드 검증
     @PostMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestBody VerifyEmailRequestDto dto) {
         authService.verifyEmail(dto.getEmail(), dto.getCode());
