@@ -60,6 +60,11 @@ public class AuthService {
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .nickname(dto.getNickname())
+//                추가 20260604 김상우
+                .phone(dto.getPhone())
+                .profileImageUrl(dto.getProfileImageUrl())
+                .bio(dto.getBio())
+//                추가완료
                 .provider(UserProvider.LOCAL)
                 .role(UserRole.USER)
                 .build();

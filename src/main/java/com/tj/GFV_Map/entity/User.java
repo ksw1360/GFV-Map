@@ -41,6 +41,9 @@ public class User {
     @Column(name = "user_bio", length = 500)
     private String bio;
 
+    @Column(name = "user_phone", length = 20)   // 👈 추가 (nullable — 소셜 위해)
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_provider", nullable = false, length = 20)
     private UserProvider provider;
@@ -69,6 +72,7 @@ public class User {
                  String nickname,
                  String profileImageUrl,
                  String bio,
+                 String phone, //20260604 추가 김상우
                  UserProvider provider,
                  com.tj.GFV_Map.enums.UserRole role) {
         this.email = email;
@@ -76,6 +80,7 @@ public class User {
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
         this.bio = bio;
+        this.phone = phone;  //20260604 추가 김상우
         this.provider = provider;
         this.role = role;
     }
@@ -100,5 +105,10 @@ public class User {
 
     public void verifyEmail() {
         this.isEmailVerified = true;
+    }
+
+    //20260604 추가 김상우
+    public void updatePhone(String phone) {
+        this.phone = phone;
     }
 }
