@@ -6,24 +6,22 @@ import lombok.Getter;
 
 @Getter
 public class SignupRequestDto {
-
-    @Email
-    @NotBlank
+    @Email(message = "올바른 이메일 형식이 아닙니다")
+    @NotBlank(message = "이메일은 필수입니다")
     private String email;
 
-    @NotBlank
-    private String code;            // 이메일 인증 코드 (유지 — 프론트가 빠뜨렸지만 필수)
+    @NotBlank(message = "인증 코드를 입력해주세요")
+    private String code;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호는 필수입니다")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "닉네임은 필수입니다")
     private String nickname;
 
-    @NotBlank
-    private String phone;           // LOCAL 가입 필수
+    @NotBlank(message = "전화번호는 필수입니다")
+    private String phone;
 
-    // 선택 필드
-    private String profileImageUrl; // 프론트의 profilePic
+    private String profileImageUrl;
     private String bio;
 }
