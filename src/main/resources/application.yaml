@@ -70,3 +70,6 @@ naver:
   client-id: ${NAVER_CLIENT_ID}
   client-secret: ${NAVER_CLIENT_SECRET}
   redirect-uri: ${NAVER_REDIRECT_URI}
+
+nts:
+  service-key: ${NTS_SERVICE_KEY:00075327d3ef9395a607611636799d4d087d9f5b0c94851d50696a0710b0cfbd}
