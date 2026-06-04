@@ -7,48 +7,120 @@ Dependency용도
                 lombok (compileOnly + annotationProcessor) : Lombok — @Getter, @Builder 등
                 spring-boot-devtools : DevTools — 코드 변경 시 자동 재시작
                 mysql-connector-j : MySQL 드라이버
-src
-   - main
-     - java
-	    - com.tj.GFV_Map
-		                 - auth
-                           └ 권한 클래스 추가 예정
-                         - config
-						   └ CorsConfig.java // Cors 설정
-						   └ SecurityConfig.java // 보안 설정
-						 - controller
-						   └ MainController.java // 임시 Controller
-						 - dto
-						   └ request
-						   └ response
-						 - entity
-						   └ favorite.java // 즐겨찾기
-						   └ menu.java // 메뉴
-						   └ photo.java // 사진
-						   └ review.java // 리뷰
-						   └ user.java // 일반소비자/점주
-						   └ userpreference.java // 사용자 선호 프로필
-						   └ vegan_restarant.java // (비건/GF 식당): 가게 기본 정보
-						 - enum
-						   └ MenuCategory.java // 메뉴 enum
-						   └ OwnerType.java // 사용자 enum
-						   └ UserRole.java // 유저 enum
-						   └ VeganType.java // 채식 enum
-						 - exception
-						   └ CustomException.java // 사용자 Exception
-						   └ ErrorCode.java // 사용자 에러 코드
-						   └ GlobalExcetionHandler.java // 공통 Exception
-						 - jwt
-						   └ jwtProperties.java // jwt 설정
-						   └ JwtTokenProvider.java // jwt 등록
-						 - login
-						   └ login // 로그인 추가 예정
-						 - repository
-						   └ Jpa repository 추가 예정
-						 - service
-						   └ service.java 추가 예정
-						 GMapApplication
-     - resource
-       - application.yml
+src/main/
+├── java/com/tj/GFV_Map/
+│   │
+│   ├── GfvMapApplication.java              ← 메인 (앱 시작점)
+│   │
+│   ├── config/                             ← 설정
+│   │   ├── CorsConfig.java                 ← CORS (프론트 연동 허용)
+│   │   └── SecurityConfig.java             ← Spring Security (인증/인가, 경로 권한)
+│   │
+│   ├── controller/                         ← API 엔드포인트
+│   │   ├── AuthController.java             ← 인증 (가입/로그인/소셜/이메일인증)
+│   │   ├── RestaurantController.java       ← 식당 검색/메뉴
+│   │   ├── ReviewController.java           ← 리뷰 CRUD
+│   │   ├── ReviewReplyController.java      ← 점주 답글
+│   │   ├── ReviewReportController.java     ← 리뷰 신고
+│   │   ├── FavoriteController.java         ← 즐겨찾기
+│   │   ├── NoticeController.java           ← 공지사항
+│   │   ├── MainController.java             ← (테스트용)
+│   │   └── Test.java                       ← (테스트용)
+│   │
+│   ├── service/                            ← 비즈니스 로직
+│   │   ├── AuthService.java                ← 인증 처리
+│   │   ├── EmailService.java               ← 이메일 발송 (Gmail SMTP)
+│   │   ├── KakaoOAuthService.java          ← 카카오 로그인
+│   │   ├── GoogleOAuthService.java         ← 구글 로그인
+│   │   ├── NaverOAuthService.java          ← 네이버 로그인
+│   │   ├── RestaurantService.java          ← 식당 검색/메뉴
+│   │   ├── ReviewService.java              ← 리뷰 + 식당 평점 갱신
+│   │   ├── ReviewReplyService.java         ← 점주 답글
+│   │   ├── ReviewReportService.java        ← 리뷰 신고
+│   │   ├── FavoriteService.java            ← 즐겨찾기 토글
+│   │   └── NoticeService.java              ← 공지사항
+│   │
+│   ├── repository/                         ← DB 접근 (JPA)
+│   │   ├── UserRepository.java
+│   │   ├── RefreshTokenRepository.java
+│   │   ├── VerificationCodeRepository.java
+│   │   ├── RestaurantRepository.java
+│   │   ├── RestaurantSearchSpec.java       ← 동적 검색 (Specification)
+│   │   ├── MenuRepository.java
+│   │   ├── ReviewRepository.java
+│   │   ├── ReviewReplyRepository.java
+│   │   ├── ReviewReportRepository.java
+│   │   ├── FavoriteRepository.java
+│   │   └── NoticeRepository.java
+│   │
+│   ├── entity/                             ← DB 테이블 매핑
+│   │   ├── User.java                       ← 사용자
+│   │   ├── UserPreference.java             ← 사용자 선호 설정
+│   │   ├── RefreshToken.java               ← 리프레시 토큰
+│   │   ├── VerificationCode.java           ← 이메일 인증 코드
+│   │   ├── Restaurant.java                 ← 식당
+│   │   ├── Menu.java                       ← 메뉴
+│   │   ├── Photo.java                      ← 사진
+│   │   ├── Review.java                     ← 리뷰
+│   │   ├── ReviewReply.java                ← 점주 답글
+│   │   ├── ReviewReport.java               ← 리뷰 신고
+│   │   ├── Favorite.java                   ← 즐겨찾기 (복합키)
+│   │   └── Notice.java                     ← 공지사항
+│   │
+│   ├── dto/                                ← 데이터 전송 객체
+│   │   ├── request/                        ← 요청 DTO
+│   │   │   ├── SignupRequestDto.java
+│   │   │   ├── LoginRequestDto.java
+│   │   │   ├── RefreshRequestDto.java
+│   │   │   ├── SendEmailCodeRequestDto.java
+│   │   │   ├── VerifyEmailRequestDto.java
+│   │   │   ├── ResendVerificationRequestDto.java
+│   │   │   ├── RestaurantSearchRequestDto.java
+│   │   │   ├── ReviewCreateRequestDto.java
+│   │   │   ├── ReviewUpdateRequestDto.java
+│   │   │   ├── ReviewReplyCreateRequestDto.java
+│   │   │   ├── ReviewReplyUpdateRequestDto.java
+│   │   │   ├── ReviewReportCreateRequestDto.java
+│   │   │   ├── NoticeCreateRequestDto.java
+│   │   │   └── NoticeUpdateRequestDto.java
+│   │   │
+│   │   └── response/                       ← 응답 DTO
+│   │       ├── TokenResponseDto.java
+│   │       ├── KakaoUserInfoDto.java
+│   │       ├── GoogleUserInfoDto.java
+│   │       ├── NaverUserInfoDto.java
+│   │       ├── RestaurantResponseDto.java
+│   │       ├── RestaurantSearchResponseDto.java
+│   │       ├── MenuResponseDto.java
+│   │       ├── ReviewResponseDto.java
+│   │       ├── ReviewReplyResponseDto.java
+│   │       ├── ReviewReportResponseDto.java
+│   │       ├── FavoriteResponseDto.java
+│   │       └── NoticeResponseDto.java
+│   │
+│   ├── enums/                              ← 열거형
+│   │   ├── UserRole.java                   ← USER/OWNER/ADMIN
+│   │   ├── UserProvider.java               ← LOCAL/KAKAO/GOOGLE/NAVER
+│   │   ├── OwnerType.java
+│   │   ├── MenuCategory.java               ← MAIN/SIDE/DRINK/DESSERT
+│   │   ├── VeganType.java                  ← VEGAN/LACTO/OVO/LACTO_OVO/PESCO
+│   │   ├── PriceRange.java
+│   │   ├── RestaurantStatus.java
+│   │   ├── PhotoType.java
+│   │   ├── ReportCategory.java             ← ABUSE/SEXUAL/FALSE_REVIEW/AD/IRRELEVANT
+│   │   └── ReportStatus.java               ← PENDING/IN_PROGRESS/RESOLVED
+│   │
+│   ├── jwt/                                ← JWT 토큰
+│   │   ├── JwtTokenProvider.java           ← 토큰 생성/검증
+│   │   ├── JwtAuthenticationFilter.java    ← 요청마다 토큰 확인
+│   │   └── JwtProperties.java              ← JWT 설정값
+│   │
+│   └── exception/                          ← 예외 처리
+│       ├── GlobalExceptionHandler.java     ← 전역 예외 핸들러
+│       ├── CustomException.java
+│       └── ErrorCode.java
+│
+└── resources/
+    └── application.yaml                    ← 설정 (DB, 메일, JWT, OAuth)
 .env // 환경 설정 파일
 .env.example // Test용 환경설정 파일
