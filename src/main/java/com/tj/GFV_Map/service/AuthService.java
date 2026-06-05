@@ -151,7 +151,8 @@ public class AuthService {
                 accessToken,
                 refreshToken,
                 user.getNickname(),          // 👈 추가
-                user.getProfileImageUrl()    // 👈 추가
+                user.getProfileImageUrl(),   // 👈 추가
+                user.getRole()
         );
     }
 
@@ -194,7 +195,8 @@ public class AuthService {
                 newAccess,
                 newRefresh,
                 user.getNickname(),          // 👈 추가
-                user.getProfileImageUrl()    // 👈 추가
+                user.getProfileImageUrl(),   // 👈 추가
+                user.getRole()
         );
     }
 
