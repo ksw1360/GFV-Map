@@ -129,7 +129,8 @@ public class GoogleOAuthService {
                 refreshToken,
                 user.getNickname(),          // 👈 추가
                 user.getProfileImageUrl(),   // 👈 추가
-                user.getRole()
+                user.getRole(),
+                user.getEmail()
         );
     }
 }
