@@ -80,7 +80,7 @@ public class AuthController {
         return ResponseEntity.ok(naverOAuthService.loginWithNaver(code, state));
     }
 
-    // 이멜 코드 검증
+    // 이멜 코드 검증 사용안함
     @PostMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestBody VerifyEmailRequestDto dto) {
         authService.verifyEmail(dto.getEmail(), dto.getCode());
