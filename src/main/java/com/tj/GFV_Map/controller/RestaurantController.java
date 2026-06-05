@@ -26,7 +26,7 @@ public class RestaurantController {
     }
 
     // 지역(주소) 조회 (keyword 없으면 전체)
-    @GetMapping("/address")
+    @GetMapping("/region")
     public ResponseEntity<List<RestaurantResponseDto>> getRestaurantAddress(
             @RequestParam(required = false) String keyword
     ) {

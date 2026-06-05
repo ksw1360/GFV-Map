@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -20,21 +21,25 @@ public class BusinessVerifyService {
     private final RestTemplate restTemplate;   // SecurityConfig에 이미 빈 있음
 
     @Value("${nts.service-key}")
-    private String serviceKey;
-
+    private String serviceKey="00075327d3ef9395a607611636799d4d087d9f5b0c94851d50696a0710b0cfbd";
+//https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=00075327d3ef9395a607611636799d4d087d9f5b0c94851d50696a0710b0cfbd
     private static final String STATUS_URL =
             "https://api.odcloud.kr/api/nts-businessman/v1/status";
 
     /**
      * 사업자번호 상태조회 → 계속사업자(01)면 true
      */
-    public boolean isValidBusiness(String bno) {
+    public boolean isValidBusiness(String bno) throws URISyntaxException {
         // 하이픈 제거 (123-45-67890 → 1234567890)
         String cleanBno = bno.replaceAll("-", "").trim();
 
         // URL 조립 (이 인증키는 16진수라 디코딩 불필요)
-        String url = STATUS_URL + "?serviceKey=" + serviceKey;
-        URI uri = URI.create(url);   // URI 객체로 만들어 RestTemplate 이중 인코딩 방지
+//        String url = STATUS_URL + "?serviceKey=" + serviceKey;
+//        URI uri = URI.create(url);   // URI 객체로 만들어 RestTemplate 이중 인코딩 방지
+        String fullUrl = STATUS_URL + "?serviceKey=" + serviceKey;
+
+        URI uri = new URI(fullUrl);
+
 
         // 요청 바디
         Map<String, Object> body = Map.of("b_no", List.of(cleanBno));

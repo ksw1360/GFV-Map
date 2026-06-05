@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.Map;
 
 @RestController
@@ -17,7 +18,7 @@ public class BusinessController {
 
     // 사업자번호 검증 (유효한 계속사업자인가?)
     @PostMapping("/verify")
-    public ResponseEntity<Map<String, Object>> verify(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Map<String, Object>> verify(@RequestBody Map<String, String> body) throws URISyntaxException {
         String bno = body.get("bno");
         boolean valid = businessVerifyService.isValidBusiness(bno);
 
