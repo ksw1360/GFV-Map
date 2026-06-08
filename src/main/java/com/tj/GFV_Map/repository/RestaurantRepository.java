@@ -26,6 +26,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long>,
     // 지역(주소)
     List<Restaurant> findByAddressContaining(String keyword);
 
+    // 점주 본인 가게 목록
+    List<Restaurant> findByOwnerId(Long ownerId);
+
     // 내 주위 1km 반경
     @Query(value = """
             SELECT * FROM restaurants r
