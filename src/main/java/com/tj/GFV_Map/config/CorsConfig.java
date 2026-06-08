@@ -9,7 +9,8 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:3000"
+                        "http://localhost:3000",
+                        "http://192.168.0.12:3000/auth/google/login"
 // 1. AWS Elastic Beanstalk
 // 2. 가비아 연동 주소 추가 예정
 //                        "https://main.d1t17ie3uipfsv.amplifyapp.com"
