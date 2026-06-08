@@ -59,7 +59,15 @@ public class ReviewReportService {
                 .build();
         ReviewReport saved = reportRepository.save(report);
 
+        // ↓ 신고 즉시 리뷰 숨김 처리 (추가)
+//        review.hide();
+//        ReviewReport saved2 = reportRepository.save(report);
+        System.out.println(">>> 신고저장 완료, hide 호출 전 isHidden=" + review.getIsHidden());
+        review.hide();
+        System.out.println(">>> hide 호출 후 isHidden=" + review.getIsHidden());
         return ReviewReportResponseDto.from(saved);
+
+//        return ReviewReportResponseDto.from(saved);
     }
 
     // ===== 관리자: 신고 목록 조회 =====
