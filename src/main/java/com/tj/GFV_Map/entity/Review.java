@@ -108,4 +108,10 @@ public class Review {
     public void hide() {
         this.isHidden = true;
     }
+
+    // ↓ 추가: 신고 반려 시 리뷰 다시 보이게
+    public void unhide() {
+        this.isHidden = false;
+    }
+
 }
