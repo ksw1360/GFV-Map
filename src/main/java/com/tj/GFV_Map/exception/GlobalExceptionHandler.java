@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleConflict(IllegalStateException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                 "status",    409,
-                "message",   e.getMessage() + " 등록되지 않은 인증키 입니다.",
+                "message",   e.getMessage(),
                 "timestamp", LocalDateTime.now().toString()
         ));
     }

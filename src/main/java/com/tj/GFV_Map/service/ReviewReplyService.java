@@ -90,8 +90,8 @@ public class ReviewReplyService {
 
     // ===== 리뷰의 답글 조회 =====
     public ReviewReplyResponseDto getReplyByReviewId(Long reviewId) {
-        ReviewReply reply = replyRepository.findByReviewId(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("답글이 없습니다."));
-        return ReviewReplyResponseDto.from(reply);
+        return replyRepository.findByReviewId(reviewId)
+                .map(ReviewReplyResponseDto::from)
+                .orElse(null);   // 답글 없으면 null (200으로 응답)
     }
 }

@@ -73,3 +73,10 @@ naver:
 
 nts:
   service-key: ${NTS_SERVICE_KEY:00075327d3ef9395a607611636799d4d087d9f5b0c94851d50696a0710b0cfbd}
+
+aws:
+  s3:
+    bucket: ${AWS_S3_BUCKET}
+    region: ${AWS_S3_REGION}
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
