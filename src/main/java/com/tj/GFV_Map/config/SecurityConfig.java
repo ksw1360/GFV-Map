@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 공개: 로그인/회원가입
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/favicon.ico", "/error").permitAll()
                         // 그 외 전부 인증 필요 (로그인 후 접근)
                         .anyRequest().authenticated()
                 )
@@ -71,7 +72,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트 주소
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://192.168.7.120:3000"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

@@ -40,6 +40,6 @@ public class UserController {
     public ResponseEntity<Page<AdminUserResponseDto>> getAllUsers(
             @AuthenticationPrincipal Long adminId,
             @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(userService.getAllUsers(adminId, null));
+        return ResponseEntity.ok(userService.getAllUsers(adminId, pageable));
     }
 }
