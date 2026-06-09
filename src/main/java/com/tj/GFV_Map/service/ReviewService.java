@@ -104,27 +104,34 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
+        // ===== [임시 디버그] 토큰 주인 vs 리뷰 주인 비교 =====
+        System.out.println(">>> [리뷰삭제] 요청 reviewId = " + reviewId);
+        System.out.println(">>> [리뷰삭제] 토큰의 userId (삭제 요청자) = " + userId);
+        System.out.println(">>> [리뷰삭제] 리뷰 주인 userId = " + review.getUser().getId());
+        System.out.println(">>> [리뷰삭제] 두 값 같은가? = " + review.getUser().getId().equals(userId));
+        // ===================================================
+
         if (!review.getUser().getId().equals(userId)) {
             throw new IllegalStateException("본인의 리뷰만 삭제할 수 있습니다.");
         }
 
-        review.hide();
+        review.softDelete();
 
-        // 평점 재계산 (숨김 처리된 리뷰는 평점에서 제외되므로)
+        // 평점 재계산 (삭제된 리뷰는 평점에서 제외되므로)
         updateRestaurantRatingStats(review.getRestaurant());
     }
 
     // ===== 식당의 리뷰 목록 =====
     public Page<ReviewResponseDto> getReviewsByRestaurant(Long restaurantId, Pageable pageable) {
         return reviewRepository
-                .findByRestaurantIdAndIsHiddenFalseOrderByCreatedAtDesc(restaurantId, pageable)
+                .findByRestaurantIdAndIsHiddenFalseAndIsDeletedFalseOrderByCreatedAtDesc(restaurantId, pageable)
                 .map(ReviewResponseDto::from);
     }
 
     // ===== 사용자의 리뷰 목록 (마이페이지) =====
     public Page<ReviewResponseDto> getReviewsByUser(Long userId, Pageable pageable) {
         return reviewRepository
-                .findByUserIdAndIsHiddenFalseOrderByCreatedAtDesc(userId, pageable)
+                .findByUserIdAndIsHiddenFalseAndIsDeletedFalseOrderByCreatedAtDesc(userId, pageable)
                 .map(ReviewResponseDto::from);
     }
 
@@ -143,7 +150,7 @@ public class ReviewService {
     private void updateRestaurantRatingStats(Restaurant restaurant) {
         Long restaurantId = restaurant.getId();
         BigDecimal avgRating = reviewRepository.findAvgRatingByRestaurantId(restaurantId);
-        long count = reviewRepository.countByRestaurantIdAndIsHiddenFalse(restaurantId);
+        long count = reviewRepository.countByRestaurantIdAndIsHiddenFalseAndIsDeletedFalse(restaurantId);
 
         double avg = (avgRating != null)
                 ? avgRating.setScale(2, RoundingMode.HALF_UP).doubleValue()

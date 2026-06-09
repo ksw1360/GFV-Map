@@ -70,7 +70,10 @@ public class Review {
     private String recommendedMenu;
 
     @Column(name = "review_is_hidden", nullable = false)
-    private Boolean isHidden = false;
+    private Boolean isHidden = false;       // 신고로 인한 숨김 (관리자 reject 시 해제됨)
+
+    @Column(name = "review_is_deleted", nullable = false)
+    private Boolean isDeleted = false;      // 본인 삭제 (영구, reject로 안 풀림)
 
     @CreationTimestamp
     @Column(name = "review_created_at", nullable = false, updatable = false)
@@ -93,6 +96,7 @@ public class Review {
         this.companionCount = companionCount;
         this.recommendedMenu = recommendedMenu;
         this.isHidden = false;
+        this.isDeleted = false;
     }
 
     public void update(BigDecimal rating, String content, List<String> photos,
@@ -109,9 +113,14 @@ public class Review {
         this.isHidden = true;
     }
 
-    // ↓ 추가: 신고 반려 시 리뷰 다시 보이게
+    // 신고 반려 시 리뷰 다시 보이게 (신고 숨김만 해제, 본인삭제는 안 풂)
     public void unhide() {
         this.isHidden = false;
+    }
+
+    // 본인 삭제 (영구 — 신고 반려로도 복구 안 됨)
+    public void softDelete() {
+        this.isDeleted = true;
     }
 
 }

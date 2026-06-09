@@ -109,6 +109,30 @@ public class ReviewReportService {
         return ReviewReportResponseDto.from(report);
     }
 
+    // ===== 신고 반려 (부당한 신고 → 리뷰 다시 노출) =====
+    @Transactional
+    public ReviewReportResponseDto rejectReport(Long adminId, Long reportId, String adminNote) {
+        User admin = verifyAdmin(adminId);
+
+        ReviewReport report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new IllegalArgumentException("신고를 찾을 수 없습니다."));
+
+        if (report.getStatus() == ReportStatus.RESOLVED) {
+            throw new IllegalStateException("이미 처리 완료된 신고입니다.");
+        }
+        if (report.getStatus() == ReportStatus.REJECTED) {
+            throw new IllegalStateException("이미 반려된 신고입니다.");
+        }
+
+        // 1. 신고 반려 마크
+        report.reject(admin, adminNote);
+
+        // 2. 리뷰 다시 노출 (숨김 해제)
+        report.getReview().unhide();
+
+        return ReviewReportResponseDto.from(report);
+    }
+
     // ===== Helper: 관리자 권한 체크 =====
     private User verifyAdmin(Long adminId) {
         User admin = userRepository.findById(adminId)

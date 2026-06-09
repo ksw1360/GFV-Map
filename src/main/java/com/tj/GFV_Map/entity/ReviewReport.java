@@ -85,4 +85,12 @@ public class ReviewReport {
         this.adminNote = adminNote;
         this.resolvedAt = LocalDateTime.now();
     }
+
+    // 관리자가 신고 반려 (부당한 신고 → 리뷰 다시 노출)
+    public void reject(User admin, String adminNote) {
+        this.status = ReportStatus.REJECTED;
+        this.admin = admin;
+        this.adminNote = adminNote;
+        this.resolvedAt = LocalDateTime.now();
+    }
 }

@@ -55,4 +55,14 @@ public class ReviewReportController {
         String adminNote = body != null ? body.get("adminNote") : null;
         return ResponseEntity.ok(reportService.resolveReport(adminId, reportId, adminNote));
     }
+
+    // 관리자: 신고 반려 (부당한 신고 → 리뷰 다시 노출)
+    @PostMapping("/admin/{reportId}/reject")
+    public ResponseEntity<ReviewReportResponseDto> reject(
+            @AuthenticationPrincipal Long adminId,
+            @PathVariable Long reportId,
+            @RequestBody(required = false) Map<String, String> body) {
+        String adminNote = body != null ? body.get("adminNote") : null;
+        return ResponseEntity.ok(reportService.rejectReport(adminId, reportId, adminNote));
+    }
 }
