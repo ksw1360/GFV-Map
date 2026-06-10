@@ -65,4 +65,13 @@ public class ReviewReportController {
         String adminNote = body != null ? body.get("adminNote") : null;
         return ResponseEntity.ok(reportService.rejectReport(adminId, reportId, adminNote));
     }
+
+    // ReviewReportController
+    @DeleteMapping("/admin/review/{reviewId}")
+    public ResponseEntity<String> deleteReviewByAdmin(
+            @AuthenticationPrincipal Long adminId,
+            @PathVariable Long reviewId) {
+        reportService.deleteReviewByAdmin(adminId, reviewId);
+        return ResponseEntity.ok("리뷰가 삭제되었습니다.");
+    }
 }

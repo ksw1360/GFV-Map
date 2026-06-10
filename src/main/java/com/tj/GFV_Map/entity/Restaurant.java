@@ -195,7 +195,7 @@ public class Restaurant {
         this.isVerified = true;
     }
 
-//    @OneToMany(mappedBy = "restaurant") private List<Menu> menus;
+    //    @OneToMany(mappedBy = "restaurant") private List<Menu> menus;
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Menu> menus = new ArrayList<>();
 

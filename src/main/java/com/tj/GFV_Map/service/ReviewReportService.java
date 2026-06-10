@@ -142,4 +142,12 @@ public class ReviewReportService {
         }
         return admin;
     }
+
+    @Transactional
+    public void deleteReviewByAdmin(Long adminId, Long reviewId) {
+        verifyAdmin(adminId);
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
+        review.softDelete();
+    }
 }
