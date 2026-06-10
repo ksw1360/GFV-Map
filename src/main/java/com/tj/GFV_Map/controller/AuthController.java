@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
 import java.util.Map;  // 위쪽 import에 추가
 
 @RestController
@@ -47,8 +49,14 @@ public class AuthController {
     private final KakaoOAuthService kakaoOAuthService; // 필드 추가
 
     @GetMapping("/kakao/callback")
-    public ResponseEntity<TokenResponseDto> kakaoCallback(@RequestParam String code) {
-        return ResponseEntity.ok(kakaoOAuthService.loginWithKakao(code));
+    public RedirectView kakaoCallback(@RequestParam String code) {
+        TokenResponseDto token = kakaoOAuthService.loginWithKakao(code);
+
+        String redirect = "http://localhost:3000/oauth/callback"
+                + "#accessToken=" + token.getAccessToken()
+                + "&refreshToken=" + token.getRefreshToken();
+
+        return new RedirectView(redirect);
     }
 
     // 👇 새로 추가 — SPA 프론트가 POST로 code 보내는 패턴
@@ -64,8 +72,14 @@ public class AuthController {
 
     // 메서드 추가
     @GetMapping("/google/callback")
-    public ResponseEntity<TokenResponseDto> googleCallback(@RequestParam String code) {
-        return ResponseEntity.ok(googleOAuthService.loginWithGoogle(code));
+    public RedirectView googleCallback(@RequestParam String code) {
+        TokenResponseDto token = googleOAuthService.loginWithGoogle(code);
+
+        String redirect = "http://localhost:3000/oauth/callback"
+                + "#accessToken=" + token.getAccessToken()
+                + "&refreshToken=" + token.getRefreshToken();
+
+        return new RedirectView(redirect);
     }
 
     // Naver return
@@ -74,10 +88,15 @@ public class AuthController {
 
     // 메서드 추가 — state도 같이 받음
     @GetMapping("/naver/callback")
-    public ResponseEntity<TokenResponseDto> naverCallback(
-            @RequestParam String code,
-            @RequestParam String state) {
-        return ResponseEntity.ok(naverOAuthService.loginWithNaver(code, state));
+    public RedirectView naverCallback(@RequestParam String code,
+                                      @RequestParam String state) {
+        TokenResponseDto token = naverOAuthService.loginWithNaver(code, state);
+
+        String redirect = "http://localhost:3000/oauth/callback"
+                + "#accessToken=" + token.getAccessToken()
+                + "&refreshToken=" + token.getRefreshToken();
+
+        return new RedirectView(redirect);
     }
 
     // 이멜 코드 검증 사용안함
