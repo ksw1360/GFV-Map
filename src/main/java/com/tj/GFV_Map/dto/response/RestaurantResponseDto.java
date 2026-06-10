@@ -15,6 +15,7 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public class RestaurantResponseDto {
+    private Long restaurant_id;
     private String name;
     private String address;
     private String addressDetail;
@@ -43,6 +44,7 @@ public class RestaurantResponseDto {
 
     public static RestaurantResponseDto from(Restaurant restaurant) {
         return new RestaurantResponseDto(
+                restaurant.getId(),
                 restaurant.getName(),
                 restaurant.getAddress(),
                 restaurant.getAddressDetail(),
