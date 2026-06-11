@@ -20,6 +20,7 @@ import java.util.Map;  // 위쪽 import에 추가
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+//@CrossOrigin(origins = "<https://www.hjp7208.site/>")
 public class AuthController {
     private final AuthService authService;
 
