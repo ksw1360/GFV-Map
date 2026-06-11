@@ -70,18 +70,18 @@ public class ReviewReportService {
 //        return ReviewReportResponseDto.from(saved);
     }
 
-    // ===== 관리자: 신고 목록 조회 =====
+    // ===== 관리자: 신고 목록 조회 (삭제된 리뷰의 신고는 제외) =====
     public Page<ReviewReportResponseDto> getAllReports(Long adminId, Pageable pageable) {
         verifyAdmin(adminId);
-        return reportRepository.findAllByOrderByCreatedAtDesc(pageable)
+        return reportRepository.findActiveByOrderByCreatedAtDesc(pageable)
                 .map(ReviewReportResponseDto::from);
     }
 
-    // ===== 관리자: 상태별 신고 목록 =====
+    // ===== 관리자: 상태별 신고 목록 (삭제된 리뷰의 신고는 제외) =====
     public Page<ReviewReportResponseDto> getReportsByStatus(
             Long adminId, ReportStatus status, Pageable pageable) {
         verifyAdmin(adminId);
-        return reportRepository.findByStatusOrderByCreatedAtDesc(status, pageable)
+        return reportRepository.findActiveByStatusOrderByCreatedAtDesc(status, pageable)
                 .map(ReviewReportResponseDto::from);
     }
 

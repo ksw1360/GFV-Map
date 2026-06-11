@@ -53,6 +53,15 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewsByRestaurant(restaurantId, pageable));
     }
 
+    // 점주용: 본인 식당의 리뷰 목록 (신고로 숨겨진 리뷰도 isHidden 플래그와 함께 포함)
+    @GetMapping("/restaurant/{restaurantId}/owner")
+    public ResponseEntity<Page<ReviewResponseDto>> getByRestaurantForOwner(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long restaurantId,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(reviewService.getReviewsByRestaurantForOwner(restaurantId, userId, pageable));
+    }
+
     // 내 리뷰 목록 (마이페이지)
     @GetMapping("/my")
     public ResponseEntity<Page<ReviewResponseDto>> getMy(

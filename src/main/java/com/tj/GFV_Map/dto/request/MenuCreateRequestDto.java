@@ -5,6 +5,7 @@ import com.tj.GFV_Map.enums.VeganType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class MenuCreateRequestDto {
+    @JsonAlias("restaurant_id")
     private Long restaurantId;          // 어느 가게의 메뉴인지 (필수)
     private String name;                // 메뉴명 (필수)
     private Integer price;              // 가격

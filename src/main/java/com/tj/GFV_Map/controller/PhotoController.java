@@ -28,6 +28,13 @@ public class PhotoController {
         return ResponseEntity.ok(photoService.uploadPhoto(userId, req));
     }
 
+    // 내가 등록한 사진 목록 (마이페이지)
+    @GetMapping("/my")
+    public ResponseEntity<List<PhotoResponseDto>> getMyPhotos(
+            @AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(photoService.getMyPhotos(userId));
+    }
+
     // 특정 식당의 사진 목록 (공개)
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<List<PhotoResponseDto>> getByRestaurant(

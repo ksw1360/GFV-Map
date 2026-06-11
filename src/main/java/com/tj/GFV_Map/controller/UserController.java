@@ -35,6 +35,14 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfile(userId, dto));
     }
 
+    // 회원 탈퇴 (소프트 삭제)
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(
+            @AuthenticationPrincipal Long userId) {
+        userService.withdraw(userId);
+        return ResponseEntity.noContent().build();
+    }
+
     // 관리자: 전체 사용자 목록 조회
     @GetMapping("/admin/list")
     public ResponseEntity<Page<AdminUserResponseDto>> getAllUsers(

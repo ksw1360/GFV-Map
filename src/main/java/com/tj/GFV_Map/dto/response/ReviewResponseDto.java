@@ -28,6 +28,7 @@ public class ReviewResponseDto {
     private String recommendedMenu;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Boolean isHidden;
 
     public static ReviewResponseDto from(Review review) {
         return ReviewResponseDto.builder()
@@ -45,6 +46,7 @@ public class ReviewResponseDto {
                 .recommendedMenu(review.getRecommendedMenu())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
+                .isHidden(review.getIsHidden())
                 .build();
     }
 }

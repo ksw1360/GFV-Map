@@ -128,6 +128,18 @@ public class ReviewService {
                 .map(ReviewResponseDto::from);
     }
 
+    // ===== 점주용: 식당 리뷰 목록 (숨김 포함 → 신고된 리뷰도 isHidden 플래그와 함께 표시) =====
+    public Page<ReviewResponseDto> getReviewsByRestaurantForOwner(Long restaurantId, Long ownerId, Pageable pageable) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("식당을 찾을 수 없습니다."));
+        if (restaurant.getOwner() == null || !restaurant.getOwner().getId().equals(ownerId)) {
+            throw new IllegalStateException("본인 식당의 리뷰만 조회할 수 있습니다.");
+        }
+        return reviewRepository
+                .findByRestaurantIdAndIsDeletedFalseOrderByCreatedAtDesc(restaurantId, pageable)
+                .map(ReviewResponseDto::from);
+    }
+
     // ===== 사용자의 리뷰 목록 (마이페이지) =====
     public Page<ReviewResponseDto> getReviewsByUser(Long userId, Pageable pageable) {
         return reviewRepository

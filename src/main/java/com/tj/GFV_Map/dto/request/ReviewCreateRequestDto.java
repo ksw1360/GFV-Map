@@ -3,6 +3,7 @@ package com.tj.GFV_Map.dto.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ReviewCreateRequestDto {
+    @JsonAlias("restaurant_id")
     private Long restaurantId;
     private BigDecimal rating;          // 1.0 ~ 5.0
     private String content;

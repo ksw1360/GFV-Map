@@ -36,6 +36,14 @@ public class UserService {
         return UserResponseDto.from(user);  // 더티체킹으로 자동 UPDATE
     }
 
+    // ===== 회원 탈퇴 (소프트 삭제: deletedAt 세팅) =====
+    @Transactional
+    public void withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        user.softDelete();  // deletedAt = now() — 더티체킹으로 자동 UPDATE
+    }
+
     // ===== 관리자: 전체 사용자 목록 (페이징) =====
     @Transactional(readOnly = true)
     public Page<AdminUserResponseDto> getAllUsers(Long adminId, Pageable pageable) {

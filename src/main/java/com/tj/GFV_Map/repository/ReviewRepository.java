@@ -18,6 +18,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByRestaurantIdAndIsHiddenFalseAndIsDeletedFalseOrderByCreatedAtDesc(
             Long restaurantId, Pageable pageable);
 
+    // 점주용: 식당의 리뷰 목록 (숨김 포함, 본인삭제 X, 최신순) — 신고된 리뷰도 표시하기 위함
+    Page<Review> findByRestaurantIdAndIsDeletedFalseOrderByCreatedAtDesc(
+            Long restaurantId, Pageable pageable);
+
     // 사용자가 쓴 리뷰 목록 (마이페이지용)
     Page<Review> findByUserIdAndIsHiddenFalseAndIsDeletedFalseOrderByCreatedAtDesc(
             Long userId, Pageable pageable);
