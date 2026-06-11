@@ -73,10 +73,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-                "http://master.d2ahqjf7y3gh6b.amplifyapp.com",
+                "https://www.hjp7208.site",   // 실제 프론트 (www, 슬래시 X)
+                "https://hjp7208.site",
+                "http://localhost:3000",      // 로컬 개발
                 "http://192.168.7.120:3000"
         ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
