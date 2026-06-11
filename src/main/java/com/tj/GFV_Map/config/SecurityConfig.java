@@ -73,7 +73,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-                "http://master.d2ahqjf7y3gh6b.amplifyapp.com/",
+                "http://master.d2ahqjf7y3gh6b.amplifyapp.com",
                 "http://192.168.7.120:3000"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

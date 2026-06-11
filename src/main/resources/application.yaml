@@ -8,8 +8,8 @@ spring:
     password: ${DB_PASSWORD}
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 50MB
+      max-request-size: 50MB
 
 
   jpa:
@@ -77,7 +77,7 @@ naver:
   redirect-uri: ${NAVER_REDIRECT_URI}
 
 nts:
-  service-key: ${NTS_SERVICE_KEY:00075327d3ef9395a607611636799d4d087d9f5b0c94851d50696a0710b0cfbd}
+  service-key: ${NTS_SERVICE_KEY}
 
 aws:
   s3:
