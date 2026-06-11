@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 공개: 로그인/회원가입
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()  // ← 여기 끼워넣기
                         .requestMatchers("/favicon.ico", "/error").permitAll()
                         // 그 외 전부 인증 필요 (로그인 후 접근)
                         .anyRequest().authenticated()
