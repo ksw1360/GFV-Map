@@ -10,8 +10,10 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://master.d2ahqjf7y3gh6b.amplifyapp.com/",
-                        "http://192.168.7.120:3000/auth/google/login"
-
+                        "http://192.168.7.120:3000/auth/google/login",
+                        "https://master.d2ahqjf7y3gh6b.amplifyapp.com/",
+                        "https://hjp7208.site",
+                        "http://hjp7208.site"
 // 1. AWS Elastic Beanstalk
 // 2. 가비아 연동 주소 추가 예정
 //                        "https://main.d1t17ie3uipfsv.amplifyapp.com"
