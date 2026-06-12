@@ -4,6 +4,7 @@ import com.tj.GFV_Map.dto.request.RestaurantSearchRequestDto;
 import com.tj.GFV_Map.dto.response.MenuResponseDto;
 import com.tj.GFV_Map.dto.response.RestaurantResponseDto;
 import com.tj.GFV_Map.dto.response.RestaurantSearchResponseDto;
+import com.tj.GFV_Map.entity.Restaurant;
 import com.tj.GFV_Map.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,14 @@ public class RestaurantController {
             @RequestParam(required = false) String keyword
     ) {
         return ResponseEntity.ok(restaurantService.getAllAddress(keyword));
+    }
+
+    @PostMapping
+    public ResponseEntity<RestaurantResponseDto> createRestaurant(
+            @RequestBody RestaurantCreateRequestDto dto,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(restaurantService.createRestaurant(dto, authentication.getName()));
     }
 
     // 내 주변 검색 (radius 단위: 미터, 기본 1km)
