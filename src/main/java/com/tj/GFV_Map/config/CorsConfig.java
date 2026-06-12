@@ -11,7 +11,8 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "https://www.hjp7208.site",   // 실제 프론트 (www, 슬래시 X)
                         "http://localhost:3000",
-                        "http://192.168.7.120:3000/auth/google/login"
+                        "http://192.168.7.120:3000/auth/google/login",
+                        "https://master.d2ahqjf7y3gh6b.amplifyapp.com"  // ← 추가
 
 // 1. AWS Elastic Beanstalk
 // 2. 가비아 연동 주소 추가 예정

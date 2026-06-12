@@ -53,7 +53,12 @@ public class AuthController {
     public RedirectView kakaoCallback(@RequestParam String code) {
         TokenResponseDto token = kakaoOAuthService.loginWithKakao(code);
 
-        String redirect = "http://master.d2ahqjf7y3gh6b.amplifyapp.com//oauth/callback"
+//        String redirect = "http://master.d2ahqjf7y3gh6b.amplifyapp.com//oauth/callback"
+//                + "#accessToken=" + token.getAccessToken()
+//                + "&refreshToken=" + token.getRefreshToken();
+//
+//        return new RedirectView(redirect);
+        String redirect = "https://www.hjp7208.site/oauth/callback"
                 + "#accessToken=" + token.getAccessToken()
                 + "&refreshToken=" + token.getRefreshToken();
 
@@ -76,7 +81,12 @@ public class AuthController {
     public RedirectView googleCallback(@RequestParam String code) {
         TokenResponseDto token = googleOAuthService.loginWithGoogle(code);
 
-        String redirect = "http://master.d2ahqjf7y3gh6b.amplifyapp.com//oauth/callback"
+//        String redirect = "http://master.d2ahqjf7y3gh6b.amplifyapp.com//oauth/callback"
+//                + "#accessToken=" + token.getAccessToken()
+//                + "&refreshToken=" + token.getRefreshToken();
+//
+//        return new RedirectView(redirect);
+        String redirect = "https://www.hjp7208.site/oauth/callback"
                 + "#accessToken=" + token.getAccessToken()
                 + "&refreshToken=" + token.getRefreshToken();
 
@@ -93,7 +103,12 @@ public class AuthController {
                                       @RequestParam String state) {
         TokenResponseDto token = naverOAuthService.loginWithNaver(code, state);
 
-        String redirect = "http://master.d2ahqjf7y3gh6b.amplifyapp.com//oauth/callback"
+//        String redirect = "http://master.d2ahqjf7y3gh6b.amplifyapp.com//oauth/callback"
+//                + "#accessToken=" + token.getAccessToken()
+//                + "&refreshToken=" + token.getRefreshToken();
+//
+//        return new RedirectView(redirect);
+        String redirect = "https://www.hjp7208.site/oauth/callback"
                 + "#accessToken=" + token.getAccessToken()
                 + "&refreshToken=" + token.getRefreshToken();
 

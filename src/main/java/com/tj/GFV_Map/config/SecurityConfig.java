@@ -75,7 +75,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
                 "https://www.hjp7208.site",   // 실제 프론트 (www, 슬래시 X)
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "https://master.d2ahqjf7y3gh6b.amplifyapp.com"  // ← 추가
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
